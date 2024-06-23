@@ -1,0 +1,7 @@
+# DBeaver
+.metadata/**
+.dbeaver/**
+.settings/**
+
+# DataGrip
+.idea/**
