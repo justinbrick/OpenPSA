@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS tasks (
 -- Assignment of people to work on specific tickets
 CREATE TABLE IF NOT EXISTS task_account_assignments (
     task_id uuid NOT NULL REFERENCES tasks(task_id) ON DELETE CASCADE,
-    account_sub text NOT NULL REFERENCES oidc_accounts(subject) ON DELETE CASCADE,
+    account_id uuid NOT NULL REFERENCES management_accounts(account_id) ON DELETE CASCADE,
     assigned_at timestamptz NOT NULL DEFAULT now(),
-    PRIMARY KEY (account_sub, task_id)
+    PRIMARY KEY (account_id, task_id)
 );
 
 REVOKE 
@@ -25,9 +25,9 @@ ON task_account_assignments FROM PUBLIC;
 CREATE TABLE IF NOT EXISTS task_notes (
     task_id uuid NOT NULL REFERENCES tasks(task_id),
     task_note_id uuid NOT NULL DEFAULT gen_random_uuid(),
-    entered_by text NOT NULL REFERENCES oidc_accounts(subject),
+    entered_by uuid NOT NULL REFERENCES management_accounts(account_id),
     created_at timestamptz NOT NULL DEFAULT now(),
-    modified_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now(),
     note_text text NOT NULL,
     
     PRIMARY KEY (task_id, task_note_id)

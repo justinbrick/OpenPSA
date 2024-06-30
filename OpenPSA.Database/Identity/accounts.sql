@@ -1,13 +1,15 @@
-﻿-- Accounts associated with oidc
-CREATE TABLE IF NOT EXISTS oidc_accounts (
-    subject text PRIMARY KEY,
-    email text NOT NULL,
-    first_name text,
-    last_name text,
-    created_at timestamptz NOT NULL DEFAULT now(),
-    modified_at timestamptz NOT NULL DEFAULT now()
+﻿-- Accounts responsible for management & maintenance of an application.
+-- This makes use of OpenID for authenticating & authorization
+CREATE TABLE IF NOT EXISTS management_accounts
+(
+    account_id  uuid NOT NULL DEFAULT gen_random_uuid(),
+    external_id text NOT NULL,
+    first_name  text NOT NULL,
+    last_name   text NOT NULL,
+    PRIMARY KEY (account_id, external_id)
 );
 
-CREATE TABLE IF NOT EXISTS account_logins (
-    subject text REFERENCES oidc_accounts(subject)
-);
+REVOKE
+    INSERT (account_id),
+    UPDATE (account_id)
+ON management_accounts FROM PUBLIC;

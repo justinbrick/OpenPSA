@@ -1,8 +1,11 @@
-﻿CREATE TABLE IF NOT EXISTS work_order (
-    ticket_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    title text NOT NULL,
+﻿CREATE TABLE IF NOT EXISTS tickets (
+    ticket_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    task_id uuid NOT NULL REFERENCES tasks(task_id),
+    description text NOT NULL,
     updated_at timestamptz NOT NULL DEFAULT now(),
     created_at timestamptz NOT NULL DEFAULT now(),
-    CONSTRAINT title_not_empty CHECK ( trim(title) <> '' )
+    
+    PRIMARY KEY (ticket_id, task_id),
+    CONSTRAINT description_not_empty CHECK ( trim(description) <> '' )
 );
 
